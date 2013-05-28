@@ -4,50 +4,6 @@
 #
 # Copyright 2013, Joe Yates
 
-=begin
-
-id        - the user name
-password  - encoded password (echo 'PASSWORD' | mkpasswd -m sha-512 -s')
-admin     - add to sudoers
-files     - install user files
-
-Example data bag:
-
-  {
-    "id": "USER_NAME",
-    "password": "...",
-    "attributes": {
-      "admin": true
-    },
-    "public_keys": [
-      "ssh-rsa ..."
-    ],
-    "accesses": [
-      "OTHER USER NAME"
-    ],
-    "files": [
-      {
-        "path": "FILE NAME RELATIVE TO USER"S HOME",
-        "mode": "0644",
-        "content": "THE FILE CONTENT"
-      }
-    ]
-  }
-
-root
-====
-
-root is treated as special:
-* no home created/managed
-* no sudo access configured
-* no accesses configured
-* other users cannot access root via SSH, unless their
-  public key is installed by root.
-
-Remember to add the chef deploy key to root's public_keys.
-
-=end
-
 # ruby-shadow is required for setting user passwords
 gem_package 'ruby-shadow'
 
