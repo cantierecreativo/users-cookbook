@@ -53,7 +53,7 @@ An example of the expected data bag structure is as follows:
   ],
   "files": [
     {
-      "path": "FILE NAME RELATIVE TO USER"S HOME",
+      "path": "FILE NAME RELATIVE TO USER'S HOME",
       "mode": "0644",
       "content": "THE FILE CONTENT"
     }
