@@ -23,7 +23,7 @@ default_attributes = {
 users = user_names.reduce({}) do |a, name|
   data = Chef::EncryptedDataBagItem.load('users', name).to_hash
   data = defaults.merge(data)
-  data['attributes'] = data['attributes'].merge(default_attributes)
+  data['attributes'] = default_attributes.merge(data['attributes'])
   if name == 'root'
     data['accesses'] = []
     data['home'] = '/root'
