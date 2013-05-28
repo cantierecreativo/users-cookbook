@@ -59,7 +59,10 @@ An example of the expected data bag structure is as follows:
     }
   ],
   "directories": [
-    "bin"
+    {
+      "path": "bin",
+      "mode": "0770"
+    }
   ]
 }
 ```
@@ -68,7 +71,15 @@ An example of the expected data bag structure is as follows:
 * password  - encoded password (echo 'PASSWORD' | mkpasswd -m sha-512 -s')
 * attributes:
     * admin     - when truthy, adds the user to sudoers
-* files     - install user files
+* files     - install user files,
+  You can specify the following:
+    * path      - (required) the name of the file relative to the user's home,
+    * mode      - file permissions, default: "0644",
+    * content   - (required) the text to put inside the file.
+* directories - create directories,
+  You can specify the following:
+    * path      - (required) the name of the directory relative to the user's home,
+    * mode      - file permissions, default: "0700".
 * accesses  - an array of other users. This user's public keys will be copied to the
   other user's authorized_keys files allowing this user to log on as them.
 
