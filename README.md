@@ -67,7 +67,7 @@ An example of the expected data bag structure is as follows:
 * id        - (required) the user name
 * password  - encoded password (echo 'PASSWORD' | mkpasswd -m sha-512 -s')
 * attributes:
-** admin     - when truthy, adds the user to sudoers
+ * admin     - when truthy, adds the user to sudoers
 * files     - install user files
 * accesses  - an array of other users. This user's public keys will be copied to the
   other user's authorized_keys files allowing this user to log on as them.
