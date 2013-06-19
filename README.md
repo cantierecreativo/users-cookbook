@@ -25,7 +25,7 @@ The following command will give you a JSON string that, when wrapped in single
 quotes can be re-imported into a data bag:
 
 ```
-knife solo data bag show users USERNAME -F json | json_pp -json_opt canonical > JSON_FILE
+knife solo data bag show users USERNAME -F json > JSON_FILE
 ```
 
 ## Import data
