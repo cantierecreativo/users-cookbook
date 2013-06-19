@@ -68,7 +68,7 @@ An example of the expected data bag structure is as follows:
 ```
 
 * id        - (required) the user name
-* password  - encoded password (echo 'PASSWORD' | mkpasswd -m sha-512 -s')
+* password  - encoded password (see below)
 * attributes:
     * admin     - when truthy, adds the user to sudoers
 * files     - install user files,
@@ -82,6 +82,13 @@ An example of the expected data bag structure is as follows:
     * mode      - file permissions, default: "0700".
 * accesses  - an array of other users. This user's public keys will be copied to the
   other user's authorized_keys files allowing this user to log on as them.
+
+Make an encoded password:
+This requires the program 'mkpasswd' which, on Debian systems, is part of the 'whois' package.
+
+```
+$ mkpasswd --method=sha-512
+```
 
 ### root
 
