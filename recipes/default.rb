@@ -81,6 +81,15 @@ def create_user(name, u)
     content     u['public_keys'].join("\n") + "\n"
   end
 
+  u['directories'].each do |d|
+    full_path = File.join(home_dir, d['path'])
+    directory full_path do
+      owner      d['user']    || u['id']
+      group      d['group']   || u['id']
+      mode       d['mode']    || 0700
+    end
+  end
+
   u['files'].each do |f|
     pathname = File.join(home_dir, f['path'])
     file pathname do
@@ -88,15 +97,6 @@ def create_user(name, u)
       owner       u['id']
       group       u['id']
       mode        f['mode']
-    end
-  end
-
-  u['directories'].each do |d|
-    full_path = File.join(home_dir, d['path'])
-    directory full_path do
-      owner      d['user']    || u['id']
-      group      d['group']   || u['id']
-      mode       d['mode']    || 0700
     end
   end
 end
