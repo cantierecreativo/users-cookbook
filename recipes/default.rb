@@ -14,6 +14,7 @@ defaults = {
   'accesses'    => [],
   'files'       => [],
   'directories' => [],
+  'symlinks'    => {},
   'attributes'  => {},
 }
 default_attributes = {
@@ -87,6 +88,13 @@ def create_user(name, u)
       owner      d['user']    || u['id']
       group      d['group']   || u['id']
       mode       d['mode']    || 0700
+    end
+  end
+
+  u['symlinks'].each do |link_name, destination|
+    full_path = File.join(home_dir, link_name)
+    link full_path do
+      to destination
     end
   end
 
