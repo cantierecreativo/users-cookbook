@@ -124,4 +124,3 @@ admin_usernames = admins.map { |u| u['id'] }
     members     admin_usernames
   end
 end
-
