@@ -7,11 +7,8 @@
 # ruby-shadow is required for setting user passwords
 gem_package 'ruby-shadow'
 
-user_names = data_bag('users')
-
 defaults = {
   'public_keys' => [],
-  'accesses'    => [],
   'files'       => [],
   'directories' => [],
   'symlinks'    => {},
@@ -21,17 +18,15 @@ default_attributes = {
   'admin'       => false,
 }
 
-users = user_names.reduce({}) do |a, name|
+users = node['users']['list'].reduce({}) do |a, name|
   data = Chef::EncryptedDataBagItem.load('users', name).to_hash
   data = defaults.merge(data)
   data['attributes'] = default_attributes.merge(data['attributes'])
   if name == 'root'
-    data['accesses'] = []
     data['home'] = '/root'
     data['attributes']['admin'] = false
   else
     data['home'] = File.join('/home', name)
-    data['accesses'].reject! { |name| name == 'root' }
   end
   a[name] = defaults.merge(data)
   a
@@ -40,12 +35,15 @@ end
 # allow users ssh access to deploy users
 # indicated in their 'accesses' array
 def prepare_deploy_access(users)
-  users.each do |name, u|
-    u['accesses'].each do |user|
-      unless users.include?(user)
-        raise "User #{u['id']} accesses inexistent user #{user}"
-      end
-      users[user]['public_keys'] += u['public_keys']
+  node['users']['accessed_by'].each do |user, accesses|
+    unless users.include?(user)
+      raise "Cannot grant accesses for inexistent user #{user}"
+    end
+    if user == 'root'
+      raise "Can't touch root user"
+    end
+    accesses.each do |access|
+      users[user]['public_keys'] += users[access]['public_keys']
     end
   end
 end
