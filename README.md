@@ -48,7 +48,7 @@ An example of the expected data bag structure is as follows:
   "public_keys": [
     "ssh-rsa ..."
   ],
-  "accesses": [
+  "accessed_by": [
     "OTHER USER NAME"
   ],
   "files": [
@@ -80,8 +80,8 @@ An example of the expected data bag structure is as follows:
   You can specify the following:
     * path      - (required) the name of the directory relative to the user's home,
     * mode      - file permissions, default: "0700".
-* accesses  - an array of other users. This user's public keys will be copied to the
-  other user's authorized_keys files allowing this user to log on as them.
+* `accessed_by`  - an array of other users. This user's public keys will be copied to the
+  other user's `authorized_keys` files allowing this user to log on as them.
 
 Make an encoded password:
 This requires the program 'mkpasswd' which, on Debian systems, is part of the 'whois' package.
