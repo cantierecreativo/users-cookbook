@@ -137,7 +137,7 @@ end
 
 # sudo
 
-admins = users.values.select { |u| u['attributes']['admin'] }
+admins = user_data.values.select { |u| u['attributes']['admin'] }
 admin_usernames = admins.map { |u| u['id'] }
 
 node['users']['sudo_groups'].each do |g|
