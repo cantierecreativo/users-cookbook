@@ -67,16 +67,16 @@ An example of the expected data bag structure is as follows:
 }
 ```
 
-* id        - (required) the user name
-* password  - encoded password (see below)
-* attributes:
-    * admin     - when truthy, adds the user to sudoers
-* files     - install user files,
+* `id`        - (required) the user name
+* `password`  - encoded password (see below)
+* `attributes`:
+    * `admin`     - when truthy, adds the user to sudoers
+* `files`     - install user files,
   You can specify the following:
     * path      - (required) the name of the file relative to the user's home,
     * mode      - file permissions, default: "0644",
     * content   - (required) the text to put inside the file.
-* directories - create directories,
+* `directories` - create directories,
   You can specify the following:
     * path      - (required) the name of the directory relative to the user's home,
     * mode      - file permissions, default: "0700".
@@ -94,11 +94,10 @@ $ mkpasswd --method=sha-512
 
 root is treated as special:
 
-* no home created/managed
-* no sudo access configured
-* no accesses configured
-* other users cannot access root via SSH, unless their public key is installed by
-  root.
+* no home created/managed,
+* no sudo access configured,
+* `accessed_by` is ignored,
+* other users cannot access root via SSH, unless their public key is installed
+  manually by root.
 
-Remember to add the chef deploy key to root's public_keys.
-
+Remember to add the chef deploy key to root's public keys.
