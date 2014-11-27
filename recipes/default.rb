@@ -118,7 +118,7 @@ end
 admins = users.values.select { |u| u['attributes']['admin'] }
 admin_usernames = admins.map { |u| u['id'] }
 
-['admin', 'adm'].each do |g|
+node['users']['sudo_groups'].each do |g|
   group g do
     action      :create
     members     admin_usernames
