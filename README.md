@@ -5,7 +5,7 @@ Creates system users based on attributes in data bags.
 # Setup
 
 Add
-```
+```ruby
 gem 'knife-solo_data_bag'
 ```
 to your Gemfile.
@@ -15,7 +15,7 @@ to your Gemfile.
 In the root of your kitchen:
 
 ## Create a data bag
-```
+```shell
 mkdir data_bags
 knife solo data bag create users USERNAME
 ```
@@ -24,14 +24,14 @@ knife solo data bag create users USERNAME
 The following command will give you a JSON string that, when wrapped in single
 quotes can be re-imported into a data bag:
 
-```
+```shell
 knife solo data bag show users USERNAME -F json > JSON_FILE
 ```
 
 ## Import data
 Create a new data bag with data exported via the previous step:
 
-```
+```shell
 knife solo data bag create users USERNAME --json-file JSON_FILE
 ```
 
