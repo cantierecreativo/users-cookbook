@@ -18,32 +18,35 @@ default_attributes = {
   'admin'       => false,
 }
 
-users = node['users']['list'].reduce({}) do |a, name|
-  data = Chef::EncryptedDataBagItem.load('users', name).to_hash
-  data = defaults.merge(data)
-  data['attributes'] = default_attributes.merge(data['attributes'])
-  if name == 'root'
-    data['home'] = '/root'
-    data['attributes']['admin'] = false
-  else
-    data['home'] = File.join('/home', name)
-  end
-  a[name] = defaults.merge(data)
-  a
+
+def all_users
+  Chef::DataBag.load('users').keys
 end
 
-# allow users ssh access to deploy users
-# indicated in their 'accesses' array
-def prepare_deploy_access(users)
-  node['users']['accessed_by'].each do |user, accesses|
-    unless users.include?(user)
-      raise "Cannot grant accesses for inexistent user #{user}"
+def users_to_create
+  case node['users']['list']
+  when '*'
+    all_users
+  when nil
+    []
+  else
+    node['users']['list']
+  end
+end
+
+# Allow users to access deploy users via SSH.
+# Target users indicate permitted accesses in their 'accessed_by' array.
+# Supplying `accessed_by` data for root causes a fatal error.
+def prepare_deploy_access(user_data)
+  node['users']['accessed_by'].each do |target, accessors|
+    unless user_data.include?(target)
+      raise "Cannot grant access to an inexistent user '#{target}'"
     end
-    if user == 'root'
-      raise "Can't touch root user"
+    if target == 'root'
+      raise "Can't create access to root user"
     end
-    accesses.each do |access|
-      users[user]['public_keys'] += users[access]['public_keys']
+    accessors.each do |accessor|
+      user_data[target]['public_keys'] += user_data[accessor]['public_keys']
     end
   end
 end
@@ -107,9 +110,28 @@ def create_user(name, u)
   end
 end
 
-prepare_deploy_access users
+user_data = {}
 
-users.each do |name, u|
+users_to_create.each do |name|
+  data = Chef::EncryptedDataBagItem.load('users', name).to_hash
+  data = defaults.merge(data)
+  data['attributes'] = default_attributes.merge(data['attributes'])
+  if name == 'root'
+    data['home'] = '/root'
+    data['attributes']['admin'] = false
+    data['accessed_by'] = []
+  else
+    data['home'] = File.join('/home', name)
+  end
+  user_data[name] = defaults.merge(data)
+  if data.include?('accessed_by')
+    node.override['users']['accessed_by'][name] = data['accessed_by']
+  end
+end
+
+prepare_deploy_access user_data
+
+user_data.each do |name, u|
   create_user name, u
 end
 

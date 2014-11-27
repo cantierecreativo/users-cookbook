@@ -10,6 +10,40 @@ gem 'knife-solo_data_bag'
 ```
 to your Gemfile.
 
+# Attributes
+
+The default attributes are:
+
+`list` indicates which of the users in your data bags shppuld actually be created.
+The default is the special value '*', which means *all*.
+
+Note: if `list` is set to an empty array, no users will be created.
+
+```ruby
+default['users']['list'] = ['*']
+```
+
+Each user can be configured to accept ssh access with the private keys of
+other users (see below). This is a hash mapping taget users to an array of
+others who can access that user.
+
+```ruby
+default['users']['accessed_by'] = {}
+```
+
+```ruby
+default['users']['sudo_groups'] = %w(sudo admin)
+```
+
+Override defaults by setting the `users` hash:
+
+```json
+"users": {
+  "list": ["fred", "bill"],
+  "accessed_by": {"bill": ["fred"]}
+}
+```
+
 # Editing User Data
 
 In the root of your kitchen:
