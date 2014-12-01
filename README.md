@@ -76,6 +76,7 @@ An example of the expected data bag structure is as follows:
 {
   "id": "USER_NAME",
   "password": "...",
+  "home": "...",
   "attributes": {
     "admin": false
   },
@@ -103,6 +104,7 @@ An example of the expected data bag structure is as follows:
 
 * `id`        - (required) the user name
 * `password`  - encoded password (see below)
+* `home`      - home directory (default to "/home/username" or "/root")
 * `attributes`:
     * `admin`     - when truthy, adds the user to sudoers
 * `files`     - install user files,

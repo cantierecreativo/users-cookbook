@@ -117,11 +117,11 @@ users_to_create.each do |name|
   data = defaults.merge(data)
   data['attributes'] = default_attributes.merge(data['attributes'])
   if name == 'root'
-    data['home'] = '/root'
+    data['home'] ||= '/root'
     data['attributes']['admin'] = false
     data['accessed_by'] = []
   else
-    data['home'] = File.join('/home', name)
+    data['home'] ||= File.join('/home', name)
   end
   user_data[name] = defaults.merge(data)
   if data.include?('accessed_by')
