@@ -28,7 +28,7 @@ def users_to_create
   when '*'
     all_users
   when nil
-    []
+    all_users
   else
     node['users']['list']
   end
