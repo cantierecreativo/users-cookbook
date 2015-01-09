@@ -14,7 +14,7 @@ to your Gemfile.
 
 The default attributes are:
 
-`list` indicates which of the users in your data bags shppuld actually be created.
+`list` indicates which of the users in your data bags should actually be created.
 The default is the special value '*', which means *all*.
 
 Note: if `list` is set to an empty array, no users will be created.
