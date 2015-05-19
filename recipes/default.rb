@@ -2,7 +2,7 @@
 # Cookbook Name:: users
 # Recipe:: default
 #
-# Copyright 2013, Joe Yates
+# Copyright 2013-2015, Joe Yates
 
 # ruby-shadow is required for setting user passwords
 gem_package 'ruby-shadow'
@@ -55,13 +55,27 @@ def create_user(name, u)
   home_dir        = u['home']
   ssh_dir         = File.join(home_dir, '.ssh')
   authorized_keys = File.join(ssh_dir, 'authorized_keys')
+  default_shell   = "/bin/bash"
 
   user u['id'] do
-    shell       u['shell'] || '/bin/bash'
+    action      :create
+    shell       u['shell'] || default_shell
     home        home_dir
     supports    :manage_home => true
     not_if      "test -d #{home_dir}"
     not_if      { name == 'root' }
+  end
+
+  user "maintain #{u["id"]}'s shell" do
+    action      :modify
+    username    u["id"]
+    shell       u["shell"]
+    only_if     { u["shell"] }
+    only_if     { u["shell"] != default_shell }
+    only_if     "test -d #{home_dir}"
+    # Is shell already set to the desired value?
+    not_if      "grep '^#{u["id"]}' /etc/passwd | grep '#{u["shell"]}$' > /dev/null"
+    not_if      { name == "root" }
   end
 
   user "set #{u['id']}'s password" do
