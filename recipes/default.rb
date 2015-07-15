@@ -11,6 +11,7 @@ defaults = {
   'public_keys' => [],
   'files'       => [],
   'directories' => [],
+  'groups'      => [],
   'symlinks'    => {},
   'attributes'  => {},
 }
@@ -82,6 +83,14 @@ def create_user(name, u)
     username    u['id']
     password    u['password']
     not_if      { u['password'].nil? }
+  end
+
+  u['groups'].each do |g|
+    group g do
+      action :modify
+      members u['id']
+      append true
+    end
   end
 
   directory ssh_dir do

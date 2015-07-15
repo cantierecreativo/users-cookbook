@@ -80,6 +80,7 @@ An example of the expected data bag structure is as follows:
   "attributes": {
     "admin": false
   },
+  "groups": ["fred"],
   "public_keys": [
     "ssh-rsa ..."
   ],
@@ -107,6 +108,7 @@ An example of the expected data bag structure is as follows:
 * `home`      - home directory (default to "/home/username" or "/root")
 * `attributes`:
     * `admin`     - when truthy, adds the user to sudoers
+* `groups`    - a list of extra groups to add the user to,
 * `files`     - install user files,
   You can specify the following:
     * path      - (required) the name of the file relative to the user's home,
