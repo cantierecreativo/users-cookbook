@@ -47,6 +47,9 @@ def prepare_deploy_access(user_data)
       raise "Can't create access to root user"
     end
     accessors.each do |accessor|
+      unless user_data.include?(accessor)
+        raise "Can't grant SSH access to user '#{target}' by user '#{accessor}' - no data bag found for user '#{accessor}'"
+      end
       user_data[target]['public_keys'] += user_data[accessor]['public_keys']
     end
   end
