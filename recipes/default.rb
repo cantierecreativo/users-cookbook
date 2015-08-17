@@ -163,6 +163,8 @@ end
 
 # sudo
 
+package "sudo"
+
 admins = user_data.values.select { |u| u['attributes']['admin'] }
 admin_usernames = admins.map { |u| u['id'] }
 
