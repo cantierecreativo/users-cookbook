@@ -182,6 +182,7 @@ admin_usernames = admins.map { |u| u['id'] }
 node['users']['sudo_groups'].each do |g|
   group g do
     action      :create
+    append      true
     members     admin_usernames
   end
 end
