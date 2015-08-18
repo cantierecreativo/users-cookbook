@@ -155,8 +155,12 @@ users_to_create.each do |name|
     data['home'] ||= File.join('/home', name)
   end
   user_data[name] = defaults.merge(data)
-  if data.include?('accessed_by')
-    node.override['users']['accessed_by'][name] = data['accessed_by']
+
+  # Apply user's accessed_by array is there is no node-specific value set
+  if node['users']['accessed_by'][name].nil?
+    if data.include?('accessed_by')
+      node['users']['accessed_by'][name] = data['accessed_by']
+    end
   end
 end
 
