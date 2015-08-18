@@ -139,7 +139,12 @@ end
 user_data = {}
 
 users_to_create.each do |name|
-  data = Chef::EncryptedDataBagItem.load('users', name).to_hash
+  data = nil
+  begin
+    data = Chef::EncryptedDataBagItem.load('users', name).to_hash
+  rescue Chef::Exceptions::ValidationFailed => e
+    raise "Unable to load data bag users/#{name}. #{e}"
+  end
   data = defaults.merge(data)
   data['attributes'] = default_attributes.merge(data['attributes'])
   if name == 'root'
