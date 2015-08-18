@@ -161,10 +161,8 @@ users_to_create.each do |name|
   user_data[name] = defaults.merge(data)
 
   # Apply user's accessed_by array is there is no node-specific value set
-  if node['users']['accessed_by'][name].nil?
-    if data.include?('accessed_by')
-      node['users']['accessed_by'][name] = data['accessed_by']
-    end
+  if data.include?('accessed_by')
+    node.default['users']['accessed_by'][name] = data['accessed_by']
   end
 end
 
