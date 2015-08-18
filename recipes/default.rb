@@ -20,7 +20,9 @@ default_attributes = {
 }
 
 # backwards compatability:
-node['users']['create'] = node['users']['list']
+if node['users']['list']
+  node.default['users']['create'] = node['users']['list']
+end
 
 def all_users
   Chef::DataBag.load('users').keys
