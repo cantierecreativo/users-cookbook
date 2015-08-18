@@ -19,19 +19,21 @@ default_attributes = {
   'admin'       => false,
 }
 
+# backwards compatability:
+node['users']['create'] = node['users']['list']
 
 def all_users
   Chef::DataBag.load('users').keys
 end
 
 def users_to_create
-  case node['users']['list']
+  case node['users']['create']
   when '*'
     all_users
   when nil
     all_users
   else
-    node['users']['list']
+    node['users']['create']
   end
 end
 

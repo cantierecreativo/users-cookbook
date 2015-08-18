@@ -14,34 +14,37 @@ to your Gemfile.
 
 The default attributes are:
 
-`list` indicates which of the users in your data bags should actually be created.
+## `create`
+
+`create` indicates which of the users in your data bags should actually be created.
 The default is the special value '*', which means *all*.
 
-Note: if `list` is set to an empty array, no users will be created.
+Note: if `create` is set to an empty array, no users will be created.
 
 ```ruby
-default['users']['list'] = ['*']
+default['users']['create'] = '*'
 ```
 
-Each user can be configured to accept ssh access with the private keys of
-other users (see below). This is a hash mapping taget users to an array of
-others who can access that user.
+## `accessed_by`
 
 ```ruby
 default['users']['accessed_by'] = {}
 ```
 
+Each user can be configured to accept ssh access with the private keys of
+other users (see below).
+Individual users' 'accessed_by' arrays can be overriden via the 'accessed_by' attribute
+on a node, which maps users to a list of other users who can access them.
+
+Overriding users' accessed_by attribute:
 ```ruby
-default['users']['sudo_groups'] = %w(sudo admin)
+node['users']['accessed_by'] = {'fred' => ["bob"]}
 ```
 
-Override defaults by setting the `users` hash:
+## `sudo_groups`
 
-```json
-"users": {
-  "list": ["fred", "bill"],
-  "accessed_by": {"bill": ["fred"]}
-}
+```ruby
+default['users']['sudo_groups'] = %w(sudo admin)
 ```
 
 # Editing User Data
@@ -134,8 +137,6 @@ root is treated as special:
 
 * no home created/managed,
 * no sudo access configured,
-* `accessed_by` is ignored,
-* other users cannot access root via SSH, unless their public key is installed
-  manually by root.
+* `accessed_by` is ignored.
 
 Remember to add the chef deploy key to root's public keys.
