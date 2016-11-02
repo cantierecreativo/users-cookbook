@@ -5,6 +5,7 @@
 # Copyright 2013-2015, Joe Yates
 
 # ruby-shadow is required for setting user passwords
+package 'ruby-dev'
 gem_package 'ruby-shadow'
 
 defaults = {
