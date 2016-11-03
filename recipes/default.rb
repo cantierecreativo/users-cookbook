@@ -5,7 +5,9 @@
 # Copyright 2013-2015, Joe Yates
 
 # ruby-shadow is required for setting user passwords
-package 'ruby-dev'
+%w(build-essential ruby-dev).each do |p|
+  package p
+end
 gem_package 'ruby-shadow'
 
 defaults = {
