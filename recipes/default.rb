@@ -72,7 +72,7 @@ def create_user(name, u)
     action      :create
     shell       u['shell'] || default_shell
     home        home_dir
-    supports    :manage_home => true
+    manage_home true
     not_if      "test -d #{home_dir}"
     not_if      { name == 'root' }
   end
