@@ -2,7 +2,7 @@
 # Cookbook Name:: users
 # Recipe:: default
 #
-# Copyright 2013-2015, Joe Yates
+# Copyright 2013-2019, Joe Yates
 
 # ruby-shadow is required for setting user passwords
 %w(build-essential ruby-dev).each do |p|
@@ -39,7 +39,6 @@ def all_users
 
   node['users']['extra_bags'].each do |eb|
     secret_key = Chef::EncryptedDataBagItem.load(eb["key"], eb["path"]).to_hash
-    #secret_key = Chef::EncryptedDataBagItem.load_secret(eb["key"])
     Chef::DataBag.load(eb["path"]).keys.each do |name|
       begin
         users[name] = Chef::EncryptedDataBagItem.load(eb["path"], name, secret_key["password"]).to_hash
@@ -67,8 +66,6 @@ def define_users
         end
       else
         secret_key = Chef::EncryptedDataBagItem.load(ab["key"], ab["path"]).to_hash
-        #Chef::Log.debug("Loaded secret_key: #{secret_key["password"]}")
-        #secret_key = Chef::EncryptedDataBagItem.load_secret(ab["key"])
         if Chef::DataBag.load(ab["path"]).keys.include?(name)
           begin
             users[name] = Chef::EncryptedDataBagItem.load(ab["path"], name, secret_key["password"]).to_hash
@@ -198,12 +195,6 @@ end
 user_data = {}
 
 users_to_create.each do |name, data|
-  #data = nil
-  #begin
-  #  data = Chef::EncryptedDataBagItem.load('users', name).to_hash
-  #rescue Chef::Exceptions::ValidationFailed => e
-  #  raise "Unable to load data bag users/#{name}. #{e}"
-  #end
   data = defaults.merge(data)
   data['attributes'] = default_attributes.merge(data['attributes'])
   if name == 'root'
