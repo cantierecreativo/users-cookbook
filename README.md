@@ -10,6 +10,37 @@ gem 'knife-solo_data_bag'
 ```
 to your Gemfile.
 
+# Usage
+
+This cookbook create or update system users. To use via JSON attributes node:
+
+```json
+"users": {
+  "list": [
+    "jones",
+    "michael",
+    "scott"
+  ],
+  "accessed_by": {
+    "scott": ["jones", "michael"]
+  }
+}
+```
+
+If you want to crete a submodule repository with shared usesr add this attributes:
+
+```json
+"users": {
+  "extra_bags": [
+    {
+      "path": "PATH TO EXTRA DATA BAGS",
+      "key": "CURRENT PROJECT NAME"
+    }
+  ],
+  ...
+}
+```
+
 # Attributes
 
 The default attributes are:
