@@ -27,6 +27,10 @@ if node['users']['list']
   node.default['users']['create'] = node['users']['list']
 end
 
+if node['users']['extra_bags']
+  node.default['users']['extra'] = node['users']['extra_bags']
+end
+
 def all_users
   users = {}
   Chef::DataBag.load('users').keys.each do |name|
@@ -37,7 +41,7 @@ def all_users
     end
   end
 
-  node['users']['extra_bags'].each do |eb|
+  node['users']['extra'].each do |eb|
     secret_key = Chef::EncryptedDataBagItem.load(eb["key"], eb["path"]).to_hash
     Chef::DataBag.load(eb["path"]).keys.each do |name|
       begin
@@ -53,7 +57,7 @@ end
 
 def define_users
   users = {}
-  all_bags = node['users']['extra_bags'] + [{'path' => 'users', 'key' => 'default'}]
+  all_bags = node['users']['extra'] + [{'path' => 'users', 'key' => 'default'}]
   node['users']['create'].each do |name|
     all_bags.each do |ab|
       if ab['key'] == 'default'
